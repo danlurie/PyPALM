@@ -1,2 +1,33 @@
 # PyPALM
-Flexible methods for permutation analysis of linear models
+Flexible methods for permutation analysis of linear models. 
+
+## Summary
+PyPALM provides functions for testing the significance of contrasts in multiple linear regression models using non-parametric permutation testing. The major advantage of PyPALM over existing packages is the ability to specify a custom function for shuffling data or generating surrogate data sets. This is useful in situations where data have limited exchangability, such as in the presence of autocorrelation (e.g. when comparing two brain maps).
+
+## What it does and how it works
+For a linear model of the form: Y ~ X + Z.
+- Y is the response variable.
+- X is one or more predictor variables of interest.
+- Z is one or more predictor variables of non-interest.
+
+PyPALM currently provides two methods for estimating the significance of the effect of X while accounting for ("controllilng") the effect of Z:
+1. Freedman-Lane: Permute the residulas of a reduced model (Y ~ Z).
+2. Manly: Permute Y.
+
+The Freedman-Lane method is generally recommended as it preserves the relationships between Z and the other variables while providing good power and control over error rates (Winkler et al., 2014). The Manly method is provided for situations where complex dependencies between or within variables preclude application of the Freedman-Lane approach. 
+
+## PyPALM is a work in progress
+I can make no guarantees that it is suitable for use by anyone other than myself, and in the specific cases it was designed for. That said, I have tested it against the [nptest](https://cran.r-project.org/web/packages/nptest/index.html) R package and found it to produce p-values that are identical up to at least two decimal places.
+
+## Background and Acknowledgements
+Inspired by and based heavily on [PALM as implemented in FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) and related work by [Anderson Winkler](https://github.com/andersonwinkler). If you use PyPALM, in addition to citing this repository, please also cite the key publication on which this work is based:
+
+Winkler AM, Ridgway GR, Webster MA, Smith SM, Nichols TE. [Permutation inference for the general linear model.](https://doi.org/10.1016/j.neuroimage.2014.01.060) NeuroImage, 2014;92:381-397
+
+## Further Reading
+Freedman, D., & Lane, D. (1983). A Nonstochastic Interpretation of Reported Significance Levels. Journal of Business & Economic Statistics: A Publication of the American Statistical Association, 1(4), 292–298. https://doi.org/10.1080/07350015.1983.10509354
+
+Manly, B.F.J. (1986) Randomization and regression methods for testing for associations with geographical, environmental and biological distances between populations. Res Popul Ecol 28, 201–218. https://doi.org/10.1007/BF02515450
+
+Anderson, M. J. (2001). Permutation tests for univariate or multivariate analysis of variance and regression. Canadian Journal of Fisheries and Aquatic Sciences. Journal Canadien Des Sciences Halieutiques et Aquatiques, 58(3), 626–639. https://doi.org/10.1139/f01-004
+
