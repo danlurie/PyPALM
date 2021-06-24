@@ -1,0 +1,50 @@
+---
+title: "PyPALM Comparison"
+output: html_notebook
+---
+Load libraries
+```{r}
+library('permuco')
+library('dplyr')
+library('nptest')
+```
+
+Load data
+```{r}
+roi_vols = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/data/resources/BNA_ROI_volumes.txt', header = FALSE, col.names = "Z")
+ts_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/NKI-1400_CompCorGSR_BNA_timescales_median.csv')[-1]
+fc_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/NKI-1400_CompCorGSR_BNA_centralities.tsv', sep='\t')[-1]
+sc_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/Yeh_BNA_EIR_qa_nothresh_centralities.tsv', sep='\t')[-1]
+fc_pc_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/NKI_1400_CompCorGSR_BNA_zmat_mean_po_Louvain/MegaPart_gamma2p2_PC.txt', sep='\t', header=FALSE)
+fc_wd_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/NKI_1400_CompCorGSR_BNA_zmat_mean_po_Louvain/MegaPart_gamma2p2_WMDz.txt', sep='\t', header=FALSE)
+sc_pc_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/Yeh_BNA_EIR_qa_nothresh_Louvain/gamma1p2_PC.txt', sep='\t', header=FALSE)
+sc_wd_data = read.csv('~/FUSE-HWNI/dlurie/Projects/timescale_hierarchy/results/Yeh_BNA_EIR_qa_nothresh_Louvain/gamma1p2_WMDz.txt', sep='\t', header=FALSE)
+```
+
+Create a new df
+```{r}
+dat = data.frame(ts_data$lag1_median, fc_data$strength_zmean_po, fc_pc_data$V1, fc_wd_data$V1, sc_data$strength, sc_pc_data$V1, sc_wd_data$V1, roi_vols$Z)
+dat = plyr::rename(dat, c("ts_data.lag1_median" = "lag1_ac", "fc_data.strength_zmean_po" = "fc_k", "sc_data.strength" = "sc_k", "roi_vols.Z" = "roi_vols", "fc_pc_data.V1" = "fc_pc", "sc_pc_data.V1" = "sc_pc", "sc_wd_data.V1" = "sc_wd", "fc_wd_data.V1" = "fc_wd"))
+```
+
+
+Single X, Single Z
+```{r}
+res.nptest = np.reg.test(dat$sc_wd, dat$fc_k, dat$roi_vols, method="FL", R=100000, homosced = TRUE)
+res.nptest
+```
+Single X, Multiple Z
+```{r}
+res.nptest = np.reg.test(dat$sc_wd, dat$fc_k, cbind(dat$roi_vols, dat$fc_pc), method="FL", R=100000, homosced = TRUE)
+res.nptest
+```
+Multiple X, Multiple Z
+```{r}
+res.nptest = np.reg.test(cbind(dat$sc_pc, dat$sc_wd), dat$fc_k, cbind(dat$roi_vols, dat$fc_pc), method="FL", R=100000, homosced = TRUE)
+res.nptest
+```
+Multiple X, Single Z
+```{r}
+res.nptest = np.reg.test(cbind(dat$sc_pc, dat$sc_wd), dat$fc_k, dat$roi_vols, method="FL", R=100000, homosced = TRUE)
+res.nptest
+```
