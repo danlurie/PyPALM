@@ -19,7 +19,7 @@ The Freedman-Lane method is generally recommended as it preserves the relationsh
 ## Using a custom permutation function.
 The key feature of PyPALM is the ability for users to provide a custom function for permuting data (or generating surrogate data). Below is a short example of how to do this:
 
-```
+```python
 # Define a function which only shuffles values within N sub-blocks of the data.
 def split_shuffle(data, n_blocks=2):
     import numpy as np
