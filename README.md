@@ -16,6 +16,39 @@ PyPALM currently provides two methods for estimating the significance of the eff
 
 The Freedman-Lane method is generally recommended as it preserves the relationships between Z and the other variables while providing good power and control over error rates (Winkler et al., 2014). The Manly method is provided for situations where complex dependencies between or within variables preclude application of the Freedman-Lane approach. 
 
+## Using a custom permutation function.
+The key feature of PyPALM is the ability for users to provide a custom function for permuting data (or generating surrogate data). Below is a short example of how to do this:
+
+```
+# Define a function which only shuffles values within N sub-blocks of the data.
+def split_shuffle(data, n_blocks=2):
+    import numpy as np
+    blocks = np.split(data, n_blocks)
+    shuffled_data = []
+    for block in blocks:
+        shuffled_data.append(np.random.permutation(block))
+    shuffled_data = np.concatenate(shuffled_data, axis=None)
+
+    return shuffled_data
+
+# Define a helper function to wrap split_shuffle when used by PyPALM
+def perm_helper(data, n_perms, n_blocks):
+    surrogates = []
+    for i in range(n_perms)
+        surrogates.append(split_shuffle(data, n_blocks))
+
+    return surrogates
+
+# Create a dictionary to feed arguments into split_shuffle
+perm_args = {'n_blocks':15}
+
+# Run PyPALM using the Freedman-Lane method and your custom permutation function
+import pypalm
+
+t_val, p_vals, model, null_dist, surrogates = pypalm.freedman_lane(data_df, 'Yvar', 'Xvar', 'Zvar', stat='tstat', n_perms=10000, perm_func=perm_helper, perm_func_args=perm_args, return_surrogates=True, return_null=True)
+```
+If no custom function is provided, PyPALM will use random shuffling. 
+
 ## PyPALM is a work in progress
 I can make no guarantees that it is suitable for use by anyone other than myself, and in the specific cases it was designed for. That said, I have tested it against the [nptest](https://cran.r-project.org/web/packages/nptest/index.html) R package and found it to produce p-values that are identical up to at least two decimal places.
 
