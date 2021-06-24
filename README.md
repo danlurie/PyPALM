@@ -2,7 +2,7 @@
 Flexible methods for permutation analysis of linear models. 
 
 ## Summary
-PyPALM provides functions for testing the significance of contrasts in multiple linear regression models using non-parametric permutation testing. The major advantage of PyPALM over existing packages is the ability to specify a custom function for shuffling data or generating surrogate data sets. This is useful in situations where data have limited exchangability, such as in the presence of autocorrelation (e.g. when comparing two brain maps).
+PyPALM provides functions for testing the significance of contrasts in multiple linear regression models using non-parametric permutation testing. ***The major advantage of PyPALM over existing packages is the ability to specify a custom function for shuffling data or generating surrogate data sets.*** This is useful in situations where data have limited exchangability, such as in the presence of autocorrelation (e.g. when comparing two brain maps).
 
 ## What it does and how it works
 For a linear model of the form: Y ~ X + Z.
@@ -50,10 +50,12 @@ t_val, p_vals, model, null_dist, surrogates = pypalm.freedman_lane(data_df, 'Yva
 If no custom function is provided, PyPALM will use random shuffling. 
 
 ## PyPALM is a work in progress
-I can make no guarantees that it is suitable for use by anyone other than myself, and in the specific cases it was designed for. That said, I have tested it against the [nptest](https://cran.r-project.org/web/packages/nptest/index.html) R package and found it to produce p-values that are identical up to at least two decimal places.
+I can make no guarantees that it is suitable for use by anyone other than myself, and in the specific cases it was designed for. That said, I have tested it against the [nptest](https://cran.r-project.org/web/packages/nptest/index.html) R package and found it to produce p-values that are identical up to at least two decimal places. See the `test` directory for details.
 
 ## Background and Acknowledgements
-Inspired by and based heavily on [PALM as implemented in FSL](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) and related work by [Anderson Winkler](https://github.com/andersonwinkler). If you use PyPALM, in addition to citing this repository, please also cite the key publication on which this work is based:
+PyPALM is based heavily (in concept, though not necessarily in code) on [FSL PALM](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/PALM) and related work by [Anderson Winkler](https://github.com/andersonwinkler). That said, please note that PyPALM has no official relationship with the official PALM package, nor does it come anywhere close (yet?) to fully implementing all the features of PALM.
+
+If you use PyPALM, in addition to citing this repository, please also cite the key publication on which this work is based:
 
 Winkler AM, Ridgway GR, Webster MA, Smith SM, Nichols TE. [Permutation inference for the general linear model.](https://doi.org/10.1016/j.neuroimage.2014.01.060) NeuroImage, 2014;92:381-397
 
