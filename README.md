@@ -11,8 +11,8 @@ For a linear model of the form: Y ~ X + Z.
 - Z is one or more predictor variables of non-interest.
 
 PyPALM currently provides two methods for estimating the significance of the effect of X while accounting for ("controllilng") the effect of Z:
-1. Freedman-Lane: Permute the residulas of a reduced model (Y ~ Z).
-2. Manly: Permute Y.
+1. **Freedman-Lane:** Permute the residulas of a reduced model (Y ~ Z).
+2. **Manly:** Permute Y.
 
 The Freedman-Lane method is generally recommended as it preserves the relationships between Z and the other variables while providing good power and control over error rates (Winkler et al., 2014). The Manly method is provided for situations where complex dependencies between or within variables preclude application of the Freedman-Lane approach. 
 
